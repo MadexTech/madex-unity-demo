@@ -24,7 +24,7 @@ namespace MadexSDK.Editor.Utils
         [MenuItem("Madex/Dependency manager")]
         public static void ShowSdkManager()
         {
-            SspnetAdapterManager.ShowSdkManager();
+            SspnetAdapterManager.ShowSdkManager("https://github.com/MadexTech/madex-unity-demo/releases/download/version/madex-unity-plugin.unitypackage");
         }
 #endif
         

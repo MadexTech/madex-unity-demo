@@ -65,9 +65,11 @@ namespace SspnetSDK.Editor.NetworkManager
         
         private Vector2 scrollPosition;
 
+        private static string pluginUrl;
 
-        public static void ShowSdkManager()
+        public static void ShowSdkManager(string source)
         {
+            pluginUrl = source;
             GetWindow(typeof(SspnetAdapterManager),
                 true, "Dependency manager");
         }
@@ -518,7 +520,7 @@ namespace SspnetSDK.Editor.NetworkManager
             Exception error = null;
             int oldPercentage = 0, newPercentage = 0;
             
-            var path = Path.Combine("Assets/SspnetSDK", SspnetDependencyUtils.SspnetUnityPlugin + "-" + version);
+            var path = Path.Combine("temp", "download");
             
             progress = 0.01f;
             
@@ -531,8 +533,7 @@ namespace SspnetSDK.Editor.NetworkManager
                 error = args.Error;
             };
 
-            var source =
-                $"https://github.com/YabbiSDKTeam/yabbiads-plugin-unity/releases/download/{version}/{SspnetDependencyUtils.SspnetUnityPlugin}-{version}.unitypackage";
+            var source = pluginUrl.Replace("version", $"{version}");
             
             Debug.LogFormat("Downloading {0} to {1}", source, path);
             downloader.DownloadFileAsync(new Uri(source), path);

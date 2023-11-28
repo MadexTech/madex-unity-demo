@@ -1,7 +1,7 @@
 using SspnetSDK.ConsentManager.Unfiled;
 
 #if UNITY_ANDROID
-using YabbiSDK.ConsentManager.Platform.Android;
+using MadexSDK.ConsentManager.Platform.Android;
 #elif UNITY_IPHONE
 using MadexSDK.ConsentManager.Platform.iOS;
 #else
