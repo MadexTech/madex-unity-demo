@@ -1,5 +1,5 @@
 #if UNITY_ANDROID
-namespace MadexSDK.ConsentManager.Platform.Android
+namespace MadexSDK.ConsentManagerSDK.Platform.Android
 {
     internal static class ConsentManagerConsants
     {

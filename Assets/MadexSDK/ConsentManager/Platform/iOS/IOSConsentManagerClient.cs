@@ -1,8 +1,8 @@
 #if UNITY_IPHONE
 using AOT;
-using SspnetSDK.ConsentManager.Unfiled;
+using SspnetSDK.ConsentManagerSDK.Unfiled;
 
-namespace MadexSDK.ConsentManager.Platform.iOS
+namespace MadexSDK.ConsentManagerSDK.Platform.iOS
 {
     public class IOSConsentManagerClient : IConsentManagerClient
     {

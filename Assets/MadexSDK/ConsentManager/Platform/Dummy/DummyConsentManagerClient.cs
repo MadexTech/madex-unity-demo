@@ -1,7 +1,7 @@
 using UnityEngine;
-using SspnetSDK.ConsentManager.Unfiled;
+using SspnetSDK.ConsentManagerSDK.Unfiled;
 
-namespace MadexSDK.ConsentManager.Platform.Dummy
+namespace MadexSDK.ConsentManagerSDK.Platform.Dummy
 {
     public class DummyConsentManagerClient : IConsentManagerClient
     {

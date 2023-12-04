@@ -1,15 +1,15 @@
-using SspnetSDK.ConsentManager.Unfiled;
+using SspnetSDK.ConsentManagerSDK.Unfiled;
 
 #if UNITY_ANDROID
-using MadexSDK.ConsentManager.Platform.Android;
+using MadexSDK.ConsentManagerSDK.Platform.Android;
 #elif UNITY_IPHONE
-using MadexSDK.ConsentManager.Platform.iOS;
+using MadexSDK.ConsentManagerSDK.Platform.iOS;
 #else
-using MadexSDK.ConsentManager.Platform.Dummy;
+using MadexSDK.ConsentManagerSDK.Platform.Dummy;
 #endif
 
 
-namespace MadexSDK.ConsentManager.Platform
+namespace MadexSDK.ConsentManagerSDK.Platform
 {
     internal static class ConsentManagerClientFactory
     {

@@ -1,9 +1,9 @@
 #if UNITY_ANDROID
 
 using UnityEngine;
-using SspnetSDK.ConsentManager.Unfiled;
+using SspnetSDK.ConsentManagerSDK.Unfiled;
 
-namespace MadexSDK.ConsentManager.Platform.Android
+namespace MadexSDK.ConsentManagerSDK.Platform.Android
 {
     public class ConsentCallbacks : AndroidJavaProxy
     {

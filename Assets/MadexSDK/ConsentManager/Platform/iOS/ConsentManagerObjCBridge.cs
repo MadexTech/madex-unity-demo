@@ -1,7 +1,7 @@
 #if UNITY_IPHONE
 using System.Runtime.InteropServices;
 
-namespace MadexSDK.ConsentManager.Platform.iOS
+namespace MadexSDK.ConsentManagerSDK.Platform.iOS
 {
     internal delegate void ConsentCallbacks();
 

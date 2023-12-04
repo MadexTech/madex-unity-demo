@@ -1,7 +1,7 @@
-using MadexSDK.ConsentManager.Platform;
-using SspnetSDK.ConsentManager.Unfiled;
+using MadexSDK.ConsentManagerSDK.Platform;
+using SspnetSDK.ConsentManagerSDK.Unfiled;
 
-namespace MadexSDK.ConsentManager.Api
+namespace MadexSDK.ConsentManagerSDK.Api
 {
     public class ConsentManager
     {
