@@ -11,7 +11,7 @@ namespace MadexSDK.Editor.Utils
         [MenuItem("Madex/Documentation")]
         public static void OpenDocumentation()
         {
-            Application.OpenURL("https://mobileadx.gitbook.io/mobileadx/unity-plugin");
+            Application.OpenURL("https://madex.gitbook.io/madex-documentation/unity-plugin");
         }
 
         [MenuItem("Madex/Official site")]
