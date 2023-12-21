@@ -22,7 +22,7 @@ namespace MadexSDK.Demo.Scripts
         {
             try
             {
-                Madex.LoadAd(Madex.Interstitial, "b8359c60-9bde-47c9-85ff-3c7afd2bd982");
+                Madex.LoadAd(Madex.Interstitial, "50f37030-162d-4e8c-a9c0-e078d8fbf2f7");
             }
             catch (Exception error)
             {
@@ -33,7 +33,7 @@ namespace MadexSDK.Demo.Scripts
 
         public void ShowInterstitialAd()
         {
-            Madex.ShowAd(Madex.Interstitial, "b8359c60-9bde-47c9-85ff-3c7afd2bd982");
+            Madex.ShowAd(Madex.Interstitial, "50f37030-162d-4e8c-a9c0-e078d8fbf2f7");
         }
 
         public void DestroyInterstitialAd()
@@ -43,12 +43,12 @@ namespace MadexSDK.Demo.Scripts
 
         public void LoadRewardedAd()
         {
-            Madex.LoadAd(Madex.Rewarded, "eaac7a7f-b0b0-46d2-ac95-bd58578e9e29");
+            Madex.LoadAd(Madex.Rewarded, " dacd566d-8487-4bc6-8afc-486f625be870");
         }
 
         public void ShowRewardedAd()
         {
-            Madex.ShowAd(Madex.Rewarded, "eaac7a7f-b0b0-46d2-ac95-bd58578e9e29");
+            Madex.ShowAd(Madex.Rewarded, " dacd566d-8487-4bc6-8afc-486f625be870");
         }
 
         public void DestroyRewardedAd()
@@ -69,14 +69,14 @@ namespace MadexSDK.Demo.Scripts
                 Madex.SetRewardedCallbacks(this);
 
                 Madex.SetUserConsent(true);
-                Madex.Initialize("65057899-a16a-4877-989b-38c432a7fa15");
+                Madex.Initialize("d42994c6-2145-4269-9c2f-2adcf9d9703f");
                 
                 _consentManager.SetListener(this);
                 
                 var builder = new ConsentBuilder()
                     .AppendPolicyURL("https://Madex.me/privacy-policies")
                     .AppendGdpr(true)
-                    .AppendBundle("me.Madex.ads.app")
+                    .AppendBundle("madex.world.app")
                     .AppendName("Example name");
         
                 _consentManager.RegisterCustomVendor(builder);
