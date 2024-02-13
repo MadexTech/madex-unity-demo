@@ -15,13 +15,13 @@ namespace MadexSDK.Api
             return _client ??= ClientFactory.GetAdsClient();
         }
 
-        public static void Initialize(string publisherID)
+        public static void Initialize(string publisherID, IInitializationListener listener)
         {
             GetInstance().SetCustomParams("PUBLISHER_URL", "https://madex.world");
             GetInstance().SetCustomParams("CABINET", "Madex");
             GetInstance().SetCustomParams("PLATFORM", "unity");
             
-            GetInstance().Initialize(publisherID);
+            GetInstance().Initialize(publisherID, listener);
         }
         
         public static bool IsInitialized()
