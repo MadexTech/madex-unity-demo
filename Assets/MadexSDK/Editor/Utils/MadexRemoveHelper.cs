@@ -30,7 +30,7 @@ namespace MadexSDK.Editor.Utils
                     "Yes",
                     "Cancel"))
             {
-                RemoveHelper.RemoveConsentManager("MadexSDK/ConsentManager/Editor/InternalResources/remove_consent_list.xml");
+                RemoveHelper.RemoveConsentManager("MadexSDK/ConsentManagerSDK/Editor/InternalResources/remove_consent_list.xml");
             }
         }
     }
