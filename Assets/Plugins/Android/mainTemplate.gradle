@@ -3,8 +3,24 @@ apply plugin: 'com.android.library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+// Android Resolver Dependencies Start
+    implementation 'sspnet.tech.consent:madex:1.0.0' // Assets/MadexSDK/ConsentManagerSDK/Editor/NetworkConfigs/ConsentDependencies.xml:3
+    implementation 'sspnet.tech:core:1.4.0' // Assets/SspnetSDK/Editor/NetworkConfigs/SspnetCoreDependencies.xml:4
+// Android Resolver Dependencies End
 **DEPS**}
 
+// Android Resolver Exclusions Start
+android {
+  packagingOptions {
+      exclude ('/lib/arm64-v8a/*' + '*')
+      exclude ('/lib/armeabi/*' + '*')
+      exclude ('/lib/mips/*' + '*')
+      exclude ('/lib/mips64/*' + '*')
+      exclude ('/lib/x86/*' + '*')
+      exclude ('/lib/x86_64/*' + '*')
+  }
+}
+// Android Resolver Exclusions End
 android {
     ndkPath "**NDKPATH**"
 
