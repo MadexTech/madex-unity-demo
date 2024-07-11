@@ -6,17 +6,16 @@ namespace MadexSDK.ConsentManagerSDK.Platform.iOS
     internal delegate void ConsentCallbacks();
 
     internal delegate void ConsentFailCallbacks(string messgae);
-    
+
     internal delegate void ConsenClosedCallbacks(bool hasConsent);
 
     internal static class ConsentManagerObjCBridge
     {
-        
         #region Declare external C interface
 
         [DllImport("__Internal")]
         internal static extern void MadexLoadConsent();
-        
+
         [DllImport("__Internal")]
         internal static extern void MadexShowConsent();
 

@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using UnityEditor;
 
-namespace SspnetSDK.Editor.Checkers
+namespace SspnetSDK.Editor.BuildUtils
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class FixProblemInstruction

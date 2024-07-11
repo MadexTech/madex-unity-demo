@@ -7,13 +7,12 @@ using UnityEditor.iOS.Xcode;
 using System.IO;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 using SspnetSDK.Editor.InternalResources;
 using UnityEngine;
 
 #pragma warning disable 618
 
-namespace SspnetSDK.Editor.Utils
+namespace SspnetSDK.Editor.BuildUtils
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
@@ -22,7 +21,7 @@ namespace SspnetSDK.Editor.Utils
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     [SuppressMessage("ReSharper", "Unity.IncorrectMethodSignature")]
-    public class iOSPostprocessUtils : MonoBehaviour
+    public class iOSPostProcessUtils : MonoBehaviour
     {
         private const string suffix = ".framework";
         private const string minVersionToDisableBitcode = "14.0";
@@ -40,7 +39,8 @@ namespace SspnetSDK.Editor.Utils
         {
             if (string.IsNullOrEmpty(PlayerSettings.iOS.targetOSVersionString)) return;
 
-            if (!SspnetSettings.Instance.IOSSkAdNetworkItems || (SspnetSettings.Instance.IOSSkAdNetworkItemsList?.Count ?? 0) <= 0)  return;
+            if (!SspnetSettings.Instance.IOSSkAdNetworkItems ||
+                (SspnetSettings.Instance.IOSSkAdNetworkItemsList?.Count ?? 0) <= 0) return;
 
             if (buildTarget != BuildTarget.iOS) return;
 
@@ -49,12 +49,11 @@ namespace SspnetSDK.Editor.Utils
             plist.ReadFromString(File.ReadAllText(plistPath));
 
             PlistElementArray array = null;
-            if (plist.root.values.ContainsKey(SspnetUnityUtils.KeySkAdNetworkItems))
-            {
+            if (plist.root.values.ContainsKey(SspnetBuildUtils.KeySkAdNetworkItems))
                 try
                 {
                     PlistElement element;
-                    plist.root.values.TryGetValue(SspnetUnityUtils.KeySkAdNetworkItems, out element);
+                    plist.root.values.TryGetValue(SspnetBuildUtils.KeySkAdNetworkItems, out element);
                     if (element != null) array = element.AsArray();
                 }
                 catch (Exception e)
@@ -62,21 +61,16 @@ namespace SspnetSDK.Editor.Utils
                     Debug.LogError(e.Message);
                     array = null;
                 }
-            }
             else
-            {
-                array = plist.root.CreateArray(SspnetUnityUtils.KeySkAdNetworkItems);
-            }
+                array = plist.root.CreateArray(SspnetBuildUtils.KeySkAdNetworkItems);
 
             if (array != null)
-            {
                 foreach (var id in SspnetSettings.Instance.IOSSkAdNetworkItemsList)
                 {
                     if (ContainsSkAdNetworkIdentifier(array, id)) continue;
                     var added = array.AddDict();
-                    added.SetString(SspnetUnityUtils.KeySkAdNetworkID, id);
+                    added.SetString(SspnetBuildUtils.KeySkAdNetworkID, id);
                 }
-            }
 
             File.WriteAllText(plistPath, plist.WriteToString());
         }
@@ -105,22 +99,18 @@ namespace SspnetSDK.Editor.Utils
         {
             if (!SspnetSettings.Instance.NSUserTrackingUsageDescription) return;
             if (!CheckContainsKey(path, "NSUserTrackingUsageDescription"))
-            {
                 AddKeyToPlist(path, "NSUserTrackingUsageDescription",
                     "$(PRODUCT_NAME)" + " " +
                     "needs your advertising identifier to provide personalised advertising experience tailored to you.");
-            }
         }
 
         private static void AddNSLocationWhenInUseUsageDescription(string path)
         {
             if (!SspnetSettings.Instance.NSLocationWhenInUseUsageDescription) return;
             if (!CheckContainsKey(path, "NSLocationWhenInUseUsageDescription"))
-            {
                 AddKeyToPlist(path, "NSLocationWhenInUseUsageDescription",
                     "$(PRODUCT_NAME)" + " " +
                     "needs your location for analytics and advertising purposes.");
-            }
         }
 
         private static void ReplaceInFile(
@@ -172,8 +162,8 @@ namespace SspnetSDK.Editor.Utils
             project.ReadFromString(File.ReadAllText(projectPath));
 
 #if UNITY_2019_3_OR_NEWER
-           var target = project.GetUnityMainTargetGuid();
-           var unityFrameworkTarget = project.GetUnityFrameworkTargetGuid();
+            var target = project.GetUnityMainTargetGuid();
+            var unityFrameworkTarget = project.GetUnityFrameworkTargetGuid();
 #else
             var target = project.TargetGuidByName("Unity-iPhone");
 #endif
@@ -183,12 +173,10 @@ namespace SspnetSDK.Editor.Utils
             AddProjectLibs(platformLibs, project, target);
             project.AddBuildProperty(target, "OTHER_LDFLAGS", "-ObjC");
 
-            var xcodeVersion = SspnetUnityUtils.getXcodeVersion();
+            var xcodeVersion = SspnetBuildUtils.getXcodeVersion();
             if (xcodeVersion == null ||
-                SspnetUnityUtils.compareVersions(xcodeVersion, minVersionToDisableBitcode) >= 0)
-            {
+                SspnetBuildUtils.compareVersions(xcodeVersion, minVersionToDisableBitcode) >= 0)
                 project.SetBuildProperty(project.ProjectGuid(), "ENABLE_BITCODE", "NO");
-            }
 
             project.AddBuildProperty(target, "LIBRARY_SEARCH_PATHS", "$(SRCROOT)/Libraries");
             project.AddBuildProperty(target, "LIBRARY_SEARCH_PATHS", "$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)");
@@ -208,12 +196,8 @@ namespace SspnetSDK.Editor.Utils
             bool weak)
         {
             foreach (var framework in frameworks)
-            {
                 if (!project.ContainsFramework(target, framework))
-                {
                     project.AddFrameworkToProject(target, framework + suffix, weak);
-                }
-            }
         }
 
         private static void AddProjectLibs(IEnumerable<string> libs, PBXProject project, string target)
@@ -227,52 +211,35 @@ namespace SspnetSDK.Editor.Utils
 
         private static void CopyAndReplaceDirectory(string srcPath, string dstPath)
         {
-            if (Directory.Exists(dstPath))
-            {
-                Directory.Delete(dstPath);
-            }
+            if (Directory.Exists(dstPath)) Directory.Delete(dstPath);
 
-            if (File.Exists(dstPath))
-            {
-                File.Delete(dstPath);
-            }
+            if (File.Exists(dstPath)) File.Delete(dstPath);
 
             Directory.CreateDirectory(dstPath);
 
             foreach (var file in Directory.GetFiles(srcPath))
-            {
                 if (!file.Contains(".meta"))
-                {
                     File.Copy(file, Path.Combine(dstPath, Path.GetFileName(file)));
-                }
-            }
 
             foreach (var dir in Directory.GetDirectories(srcPath))
-            {
                 CopyAndReplaceDirectory(dir, Path.Combine(dstPath, Path.GetFileName(dir)));
-            }
         }
 
         private static bool ContainsSkAdNetworkIdentifier(PlistElementArray skAdNetworkItemsArray, string id)
         {
             foreach (var elem in skAdNetworkItemsArray.values)
-            {
                 try
                 {
                     PlistElement value;
                     var identifierExists = elem.AsDict().values
-                        .TryGetValue(SspnetUnityUtils.KeySkAdNetworkID, out value);
+                        .TryGetValue(SspnetBuildUtils.KeySkAdNetworkID, out value);
 
-                    if (identifierExists && value.AsString().Equals(id))
-                    {
-                        return true;
-                    }
+                    if (identifierExists && value.AsString().Equals(id)) return true;
                 }
                 catch (Exception e)
                 {
                     Debug.LogError(e.Message);
                 }
-            }
 
             return false;
         }

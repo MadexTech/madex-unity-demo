@@ -3,7 +3,7 @@ namespace SspnetSDK.ConsentManagerSDK.Unfiled
     public interface IConsentManagerClient
     {
         public void LoadManager();
-        
+
         public void ShowConsentWindow();
 
         public bool HasConsent();

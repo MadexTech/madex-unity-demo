@@ -6,16 +6,15 @@ using System;
 using System.Xml;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using SspnetSDK.Editor.Utils;
 
-namespace SspnetSDK.Editor.Checkers
+namespace SspnetSDK.Editor.BuildUtils
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class MultidexActivator : CheckingStep
     {
         #region Constants
 
-         //Templates in Unity Editor Data folder
+        //Templates in Unity Editor Data folder
         private const string gradleDefaultTemplatePath = "PlaybackEngines/AndroidPlayer/Tools/GradleTemplates";
         public const string manifestDefaultTemplatePath = "PlaybackEngines/AndroidPlayer/Apk/AndroidManifest.xml";
 
@@ -49,7 +48,7 @@ namespace SspnetSDK.Editor.Checkers
         public const string manifestMutlidexApp = "androidx.multidex.MultiDexApplication";
 
         #endregion
-        
+
         public override string getName()
         {
             return "Android Multidex Settings";
@@ -65,9 +64,9 @@ namespace SspnetSDK.Editor.Checkers
             var instructions = new List<FixProblemInstruction>();
             if (isNodexBuild() && EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
-                if (!SspnetUnityUtils.isGradleEnabled())
+                if (!SspnetBuildUtils.isGradleEnabled())
                 {
-                    if (!SspnetUnityUtils.isGradleAvailable())
+                    if (!SspnetBuildUtils.isGradleAvailable())
                     {
                         var fix = new FixProblemInstruction(
                             "Gradle should be enabled if you use nodex version of Plugin. " +
@@ -101,14 +100,9 @@ namespace SspnetSDK.Editor.Checkers
                 {
                     var settings = new ImportantGradleSettings(customGradeScript);
                     if (!settings.isMultiDexAddedCompletely())
-                    {
                         instructions.Add(new EnableMultidexInGradle(customGradeScript));
-                    }
 
-                    if (!settings.isJavaVersionIncluded())
-                    {
-                        instructions.Add(new EnableJavaVersion(customGradeScript));
-                    }
+                    if (!settings.isJavaVersionIncluded()) instructions.Add(new EnableJavaVersion(customGradeScript));
                 }
 
                 var customManifestPath = getCustomManifestPath();
@@ -151,8 +145,8 @@ namespace SspnetSDK.Editor.Checkers
         {
             var doc = new XmlDocument();
             doc.Load(manifestPath);
-            var manNode =SspnetUnityUtils.XmlFindChildNode(doc, "manifest");
-            var appNode = (XmlElement) SspnetUnityUtils.XmlFindChildNode(manNode, "application");
+            var manNode = SspnetBuildUtils.XmlFindChildNode(doc, "manifest");
+            var appNode = (XmlElement) SspnetBuildUtils.XmlFindChildNode(manNode, "application");
             return appNode;
         }
 
@@ -167,16 +161,13 @@ namespace SspnetSDK.Editor.Checkers
 
         public static string getCustomManifestPath()
         {
-            return SspnetUnityUtils.combinePaths(Application.dataPath, androidPluginsPath, manifestTemplateName);
+            return SspnetBuildUtils.combinePaths(Application.dataPath, androidPluginsPath, manifestTemplateName);
         }
 
         private static bool isNodexBuild()
         {
             var dexesDirectory = new DirectoryInfo(sspnetDexesPath);
-            if (!dexesDirectory.Exists)
-            {
-                return true;
-            }
+            if (!dexesDirectory.Exists) return true;
 
             var dexes = dexesDirectory.GetFiles("*.dex");
             return dexes.Length == 0;
@@ -185,25 +176,22 @@ namespace SspnetSDK.Editor.Checkers
         private static bool isMultidexEnabledSimpleCheck()
         {
             var path = getCustomGradleScriptPath();
-            if (string.IsNullOrEmpty(path))
-            {
-                return false;
-            }
+            if (string.IsNullOrEmpty(path)) return false;
 
             var settings = new ImportantGradleSettings(path);
-            return settings.isMultidexEnabled() && SspnetUnityUtils.isGradleEnabled();
+            return settings.isMultidexEnabled() && SspnetBuildUtils.isGradleEnabled();
         }
 
         public static string getDefaultGradleTemplate()
         {
-            var defaultGradleTemplateFullName = SspnetUnityUtils.combinePaths(
+            var defaultGradleTemplateFullName = SspnetBuildUtils.combinePaths(
                 EditorApplication.applicationContentsPath,
                 gradleDefaultTemplatePath,
                 gradleTemplateName);
             if (File.Exists(defaultGradleTemplateFullName)) return defaultGradleTemplateFullName;
             var unixAppContentsPath =
                 Path.GetDirectoryName(Path.GetDirectoryName(EditorApplication.applicationContentsPath));
-            defaultGradleTemplateFullName = SspnetUnityUtils.combinePaths(unixAppContentsPath,
+            defaultGradleTemplateFullName = SspnetBuildUtils.combinePaths(unixAppContentsPath,
                 gradleDefaultTemplatePath,
                 gradleTemplateName);
 
@@ -234,16 +222,16 @@ namespace SspnetSDK.Editor.Checkers
             compileOptions = gradleScriptFullText.Contains(MultidexActivator.COMPILE_OPTIONS);
             sourceCapability =
                 gradleScriptFullText.Contains(MultidexActivator.GRADLE_SOURCE_CAPABILITY +
-            MultidexActivator.GRADLE_JAVA_VERSION_1_8);
+                                              MultidexActivator.GRADLE_JAVA_VERSION_1_8);
             targetCapability =
                 gradleScriptFullText.Contains(MultidexActivator.GRADLE_TARGET_CAPATILITY +
                                               MultidexActivator.GRADLE_JAVA_VERSION_1_8);
             defaultConfig = gradleScriptFullText.Contains(MultidexActivator.GRAFLE_DEFAULT_CONFIG);
-            
+
             var allprojects = getModule("allprojects", gradleScriptFullText);
             googleRepositoryPresented = allprojects.Contains(MultidexActivator.GRADLE_GOOGLE_REPOSITORY) ||
-            gradleScriptFullText.Contains(MultidexActivator
-            .GRADLE_GOOGLE_REPOSITORY_COMPAT);
+                                        gradleScriptFullText.Contains(MultidexActivator
+                                            .GRADLE_GOOGLE_REPOSITORY_COMPAT);
         }
 
         public bool isJavaVersionIncluded()
@@ -265,10 +253,7 @@ namespace SspnetSDK.Editor.Checkers
         private static string getModule(string moduleName, string fulltext)
         {
             var startIndex = fulltext.IndexOf(moduleName, StringComparison.Ordinal);
-            if (startIndex == -1)
-            {
-                return "";
-            }
+            if (startIndex == -1) return "";
             startIndex = fulltext.IndexOf('{', startIndex) + 1;
             var currentIndex = startIndex;
             var braces = 1;
@@ -302,7 +287,7 @@ namespace SspnetSDK.Editor.Checkers
 
         public override void fixProblem()
         {
-            SspnetUnityUtils.enableGradleBuildSystem();
+            SspnetBuildUtils.enableGradleBuildSystem();
         }
     }
 
@@ -319,16 +304,14 @@ namespace SspnetSDK.Editor.Checkers
             //EditorApplication.applicationContentsPath is different for macos and win. need to fix to reach manifest and gradle templates 
             var defaultGradleTemplateFullName = MultidexActivator.getDefaultGradleTemplate();
 
-            var destGradleScriptFullName = SspnetUnityUtils.combinePaths(Application.dataPath,
+            var destGradleScriptFullName = SspnetBuildUtils.combinePaths(Application.dataPath,
                 MultidexActivator.androidPluginsPath,
                 MultidexActivator.gradleTemplateName);
             //Prefer to use build.gradle from the box. Just in case.
             if (File.Exists(defaultGradleTemplateFullName))
-            {
                 File.Copy(defaultGradleTemplateFullName, destGradleScriptFullName);
-            }
 
-            AssetDatabase.ImportAsset(SspnetUnityUtils.absolute2Relative(destGradleScriptFullName),
+            AssetDatabase.ImportAsset(SspnetBuildUtils.absolute2Relative(destGradleScriptFullName),
                 ImportAssetOptions.ForceUpdate);
 
             //There are no multidex settings in default build.gradle but they can add that stuff.
@@ -360,34 +343,24 @@ namespace SspnetSDK.Editor.Checkers
             var gradleScript = new StreamReader(_path);
             string multidexDependency;
             var comparsionUnityVersionWith20182 =
-                SspnetUnityUtils.compareVersions(Application.unityVersion, "2018.2");
+                SspnetBuildUtils.compareVersions(Application.unityVersion, "2018.2");
             if (comparsionUnityVersionWith20182 < 0)
-            {
                 multidexDependency = MultidexActivator.GRADLE_COMPILE + MultidexActivator.GRADLE_MULTIDEX_DEPENDENCY;
-            }
             else
-            {
                 multidexDependency = MultidexActivator.GRADLE_IMPLEMENTATION +
                                      MultidexActivator.GRADLE_MULTIDEX_DEPENDENCY;
-            }
 
             while ((line = gradleScript.ReadLine()) != null)
             {
                 if (!settings.multidexDependencyPresented && line.Contains(MultidexActivator.GRADLE_DEPENDENCIES))
-                {
                     modifiedGradle += leadingWhitespaces + multidexDependency + Environment.NewLine;
-                }
 
                 if (!settings.multidexEnabled && line.Contains(MultidexActivator.GRADLE_APP_ID))
-                {
                     modifiedGradle += leadingWhitespaces + MultidexActivator.GRADLE_MULTIDEX_ENABLE +
                                       Environment.NewLine;
-                }
 
-                if (settings.deprecatedProguardPresented && line.Contains(MultidexActivator.GRADLE_USE_PROGUARD))
-                {
-                    continue;
-                }
+                if (settings.deprecatedProguardPresented &&
+                    line.Contains(MultidexActivator.GRADLE_USE_PROGUARD)) continue;
 
                 modifiedGradle += line + Environment.NewLine;
                 leadingWhitespaces = Regex.Match(line, "^\\s*").Value;
@@ -404,7 +377,7 @@ namespace SspnetSDK.Editor.Checkers
 
             gradleScript.Close();
             File.WriteAllText(_path, modifiedGradle);
-            AssetDatabase.ImportAsset(SspnetUnityUtils.absolute2Relative(_path), ImportAssetOptions.ForceUpdate);
+            AssetDatabase.ImportAsset(SspnetBuildUtils.absolute2Relative(_path), ImportAssetOptions.ForceUpdate);
         }
     }
 
@@ -433,34 +406,22 @@ namespace SspnetSDK.Editor.Checkers
                 if (line.Contains(MultidexActivator.GRAFLE_DEFAULT_CONFIG))
                 {
                     if (!settings.compileOptions)
-                    {
                         modifiedGradle += additionalWhiteSpaces + leadingWhitespaces +
                                           MultidexActivator.COMPILE_OPTIONS + Environment.NewLine;
-                    }
 
                     if (!settings.sourceCapability)
-                    {
                         modifiedGradle += leadingWhitespaces + leadingWhitespaces +
                                           MultidexActivator.GRADLE_SOURCE_CAPABILITY
                                           + MultidexActivator.GRADLE_JAVA_VERSION_1_8 + Environment.NewLine;
-                    }
 
                     if (!settings.targetCapability)
-                    {
                         modifiedGradle += leadingWhitespaces + leadingWhitespaces +
                                           MultidexActivator.GRADLE_TARGET_CAPATILITY
                                           + MultidexActivator.GRADLE_JAVA_VERSION_1_8 + Environment.NewLine;
-                    }
 
-                    if (!settings.targetCapability)
-                    {
-                        modifiedGradle += leadingWhitespaces + "}" + Environment.NewLine;
-                    }
+                    if (!settings.targetCapability) modifiedGradle += leadingWhitespaces + "}" + Environment.NewLine;
 
-                    if (!settings.targetCapability)
-                    {
-                        modifiedGradle += leadingWhitespaces + Environment.NewLine;
-                    }
+                    if (!settings.targetCapability) modifiedGradle += leadingWhitespaces + Environment.NewLine;
                 }
 
                 modifiedGradle += line + Environment.NewLine;
@@ -469,7 +430,7 @@ namespace SspnetSDK.Editor.Checkers
 
             gradleScript.Close();
             File.WriteAllText(_path, modifiedGradle);
-            AssetDatabase.ImportAsset(SspnetUnityUtils.absolute2Relative(_path), ImportAssetOptions.ForceUpdate);
+            AssetDatabase.ImportAsset(SspnetBuildUtils.absolute2Relative(_path), ImportAssetOptions.ForceUpdate);
         }
     }
 
@@ -493,19 +454,16 @@ namespace SspnetSDK.Editor.Checkers
                 defaultTemplate = Path.Combine(unixAppContentsPath, MultidexActivator.manifestDefaultTemplatePath);
             }
 
-            var sspnetTemplate = SspnetUnityUtils.combinePaths(Application.dataPath,
+            var sspnetTemplate = SspnetBuildUtils.combinePaths(Application.dataPath,
                 MultidexActivator.sspnetTemplatesPath,
                 MultidexActivator.manifestTemplateName);
             File.Copy(File.Exists(defaultTemplate) ? defaultTemplate : sspnetTemplate, fullManifestName);
-            AssetDatabase.ImportAsset(SspnetUnityUtils.absolute2Relative(fullManifestName),
+            AssetDatabase.ImportAsset(SspnetBuildUtils.absolute2Relative(fullManifestName),
                 ImportAssetOptions.ForceUpdate);
 
             var appNode = MultidexActivator.getApplicationNode(fullManifestName);
             var ns = appNode.GetNamespaceOfPrefix("android");
-            if (!appNode.HasAttribute("name", ns))
-            {
-                new AddNameAttrubute(appNode, ns).fixProblem();
-            }
+            if (!appNode.HasAttribute("name", ns)) new AddNameAttrubute(appNode, ns).fixProblem();
         }
     }
 
@@ -528,7 +486,7 @@ namespace SspnetSDK.Editor.Checkers
             _appNode.SetAttribute("name", _ns, MultidexActivator.manifestMutlidexApp);
             Debug.Assert(_appNode.OwnerDocument != null, "appNode.OwnerDocument != null");
             _appNode.OwnerDocument.Save(fullManifestName);
-            AssetDatabase.ImportAsset(SspnetUnityUtils.absolute2Relative(fullManifestName),
+            AssetDatabase.ImportAsset(SspnetBuildUtils.absolute2Relative(fullManifestName),
                 ImportAssetOptions.ForceUpdate);
         }
     }

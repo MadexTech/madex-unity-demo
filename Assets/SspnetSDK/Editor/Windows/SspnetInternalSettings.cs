@@ -8,18 +8,19 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using SspnetSDK.Editor.InternalResources;
-using SspnetSDK.Editor.NetworkManager;
+using SspnetSDK.Editor.Models;
 
 #pragma warning disable 618
 
 namespace SspnetSDK.Editor.Utils
 {
-
     [SuppressMessage("ReSharper", "NotAccessedField.Local")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "CollectionNeverQueried.Global")]
     public class SspnetInternalSettings : EditorWindow
     {
+        private const string InternalResourcesPath = "Assets/SspnetSDK/Editor/InternalResources/";
+
 
         private static List<string> SKAdNetworkIdentifiers = new();
 
@@ -30,7 +31,6 @@ namespace SspnetSDK.Editor.Utils
 
         private void OnGUI()
         {
-
             #region Android Settings
 
             GUILayout.BeginHorizontal();
@@ -55,9 +55,7 @@ namespace SspnetSDK.Editor.Utils
                         fontStyle = FontStyle.Bold,
                         fixedHeight = 18
                     }, GUILayout.Width(100)))
-                {
                     Application.OpenURL("https://developer.android.com/studio/build/multidex");
-                }
 
                 SspnetSettings.Instance.AndroidMultidex =
                     KeyRow("Enable multidex", SspnetSettings.Instance.AndroidMultidex);
@@ -123,7 +121,7 @@ namespace SspnetSDK.Editor.Utils
         //     {
         //         SKAdNetworkIdentifiers.Clear();
         //
-        //         var path = $"{SspnetDependencyUtils.InternalResourcesPath}skadnetworkids.json";
+        //         var path = $"{InternalResourcesPath}skadnetworkids.json";
         //
         //         var source = new StreamReader(path);
         //         var fileContents = source.ReadToEnd();
@@ -167,7 +165,6 @@ namespace SspnetSDK.Editor.Utils
                     fixedHeight = 18
                 }, GUILayout.Width(200)))
             {
-                
             }
 
             GUILayout.Space(2);

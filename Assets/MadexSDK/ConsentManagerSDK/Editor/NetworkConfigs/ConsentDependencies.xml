@@ -1,6 +1,6 @@
 <dependencies>
     <androidPackages>
-        <androidPackage spec='sspnet.tech.consent:madex:1.0.0'/>
+        <androidPackage spec='sspnet.tech.consent:madex:1.1.2'/>
         <repositories>
             <repository>https://sdkpkg.sspnet.tech</repository>
         </repositories>

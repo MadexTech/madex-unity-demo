@@ -7,7 +7,7 @@ namespace MadexSDK.ConsentManagerSDK.Platform.iOS
     public class IOSConsentManagerClient : IConsentManagerClient
     {
         private static IConsentListener _listener;
-        
+
         public void LoadManager()
         {
             ConsentManagerObjCBridge.MadexLoadConsent();
@@ -20,12 +20,12 @@ namespace MadexSDK.ConsentManagerSDK.Platform.iOS
 
         public bool HasConsent()
         {
-           return ConsentManagerObjCBridge.MadexHasConsent();
+            return ConsentManagerObjCBridge.MadexHasConsent();
         }
 
         public void SetCustomStorage()
         {
-           // TODO
+            // TODO
         }
 
         public void EnableDebug(bool isDebug)
@@ -52,9 +52,9 @@ namespace MadexSDK.ConsentManagerSDK.Platform.iOS
                 OnConsentWindowShown,
                 OnConsentManagerShownFailed,
                 OnConsentWindowClosed
-                );
+            );
         }
-        
+
         #region Consent Delegate
 
         [MonoPInvokeCallback(typeof(ConsentCallbacks))]
@@ -62,7 +62,7 @@ namespace MadexSDK.ConsentManagerSDK.Platform.iOS
         {
             _listener?.OnConsentManagerLoaded();
         }
-        
+
         [MonoPInvokeCallback(typeof(ConsentFailCallbacks))]
         internal static void OnConsentManagerLoadFailed(string message)
         {
@@ -80,7 +80,7 @@ namespace MadexSDK.ConsentManagerSDK.Platform.iOS
         {
             _listener?.OnConsentManagerShownFailed(message);
         }
-        
+
         [MonoPInvokeCallback(typeof(ConsenClosedCallbacks))]
         internal static void OnConsentWindowClosed(bool hasConsent)
         {

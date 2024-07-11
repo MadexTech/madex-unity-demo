@@ -150,6 +150,21 @@ namespace MadexSDK.Demo.Scripts
             LogEvent("OnRewardedClosed");
         }
 
+        public void OnRewardedVideoStarted(AdPayload adPayload)
+        {
+            LogEvent("OnRewardedVideoStarted");
+        }
+
+        public void OnRewardedVideoCompleted(AdPayload adPayload)
+        {
+            LogEvent("OnRewardedVideoCompleted");
+        }
+
+        public void OnUserRewarded(AdPayload adPayload)
+        {
+            LogEvent("OnUserRewarded");
+        }
+
         public void OnConsentManagerLoaded()
         {
             LogEvent("onConsentManagerLoaded");

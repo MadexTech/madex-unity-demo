@@ -18,9 +18,7 @@ namespace MadexSDK.Editor.Utils
                     "Yes",
                     "Cancel"
                 ))
-            {
-                RemoveHelper.RemovePlugin("MadexSDK/Editor/InternalResources/remove_sdk_list.xml");
-            }
+                RemoveUtils.RemovePlugin("MadexSDK/Editor/InternalResources/remove_sdk_list.xml");
         }
 
         public static void RemoveConsentManager()
@@ -29,9 +27,8 @@ namespace MadexSDK.Editor.Utils
                     "Are you sure you want to remove the Consent Manager from the project?",
                     "Yes",
                     "Cancel"))
-            {
-                RemoveHelper.RemoveConsentManager("MadexSDK/ConsentManagerSDK/Editor/InternalResources/remove_consent_list.xml");
-            }
+                RemoveUtils.RemoveConsentManager(
+                    "MadexSDK/ConsentManagerSDK/Editor/InternalResources/remove_consent_list.xml");
         }
     }
 }

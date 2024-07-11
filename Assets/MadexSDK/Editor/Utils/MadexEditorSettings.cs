@@ -1,8 +1,8 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using SspnetSDK.Editor.NetworkManager;
 using SspnetSDK.Editor.Utils;
+using SspnetSDK.Editor.Windows;
 
 namespace MadexSDK.Editor.Utils
 {
@@ -20,14 +20,15 @@ namespace MadexSDK.Editor.Utils
             Application.OpenURL("https://madex.world");
         }
 
-#if UNITY_2018_1_OR_NEWER        
+#if UNITY_2018_1_OR_NEWER
         [MenuItem("Madex/Dependency manager")]
-        public static void ShowSdkManager()
+        public static void ShowDependencyManager()
         {
-            SspnetAdapterManager.ShowSdkManager("https://sdkpkg.sspnet.tech/unity/madex/latest/madex-unity-plugin.unitypackage");
+            SspnetAdapterManager.ShowWindow(
+                "https://sdkpkg.sspnet.tech/unity/madex/latest/madex-unity-plugin.unitypackage");
         }
 #endif
-        
+
         [MenuItem("Madex/Plugin settings")]
         public static void ShowInternalSettings()
         {
@@ -39,7 +40,7 @@ namespace MadexSDK.Editor.Utils
         {
             MadexRemoveHelper.RemovePlugin();
         }
-        
+
         [MenuItem("Madex/Remove Consent Manager")]
         public static void RemoveConsentPlugin()
         {

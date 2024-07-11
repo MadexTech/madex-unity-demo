@@ -4,6 +4,7 @@ using SspnetSDK.ConsentManagerSDK.Unfiled;
 using MadexSDK.ConsentManagerSDK.Platform.Android;
 #elif UNITY_IPHONE
 using MadexSDK.ConsentManagerSDK.Platform.iOS;
+
 #else
 using MadexSDK.ConsentManagerSDK.Platform.Dummy;
 #endif
@@ -18,7 +19,7 @@ namespace MadexSDK.ConsentManagerSDK.Platform
 #if UNITY_ANDROID
 			return new AndroidConsentManagerClient();
 #elif UNITY_IPHONE
-			return new IOSConsentManagerClient();
+            return new IOSConsentManagerClient();
 #else
             return new DummyConsentManagerClient();
 #endif

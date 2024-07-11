@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using UnityEngine;
 
-namespace SspnetSDK.Editor.NetworkManager
+namespace SspnetSDK.Editor.Unfiled
 {
     public abstract class XmlUtilities
     {
         public static int Num;
+
         internal static bool ParseXmlTextFileElements(
             string filename,
             ParseElement parseElement)
@@ -37,7 +39,7 @@ namespace SspnetSDK.Editor.NetworkManager
                     }
 
                     if ((xmlTextReader.NodeType == XmlNodeType.EndElement ||
-                         xmlTextReader.NodeType == XmlNodeType.Element && xmlTextReader.IsEmptyElement) &&
+                         (xmlTextReader.NodeType == XmlNodeType.Element && xmlTextReader.IsEmptyElement)) &&
                         !string.IsNullOrEmpty(parentElementName))
                     {
                         if (elementNameStack[0] == name)
@@ -57,6 +59,16 @@ namespace SspnetSDK.Editor.NetworkManager
             }
 
             return true;
+        }
+
+        public static void FormatXml(string inputXml)
+        {
+            var document = new XmlDocument();
+            document.Load(inputXml);
+            using var writer = new XmlTextWriter(inputXml, Encoding.UTF8);
+            writer.Formatting = Formatting.Indented;
+            writer.Indentation = 4;
+            document.Save(writer);
         }
 
         private class Reader
@@ -87,10 +99,7 @@ namespace SspnetSDK.Editor.NetworkManager
 
             public void Read()
             {
-                if (Reading && !XmlReaderIsAhead)
-                {
-                    Reading = _reader.Read();
-                }
+                if (Reading && !XmlReaderIsAhead) Reading = _reader.Read();
 
                 _lineNumber = _reader.LineNumber;
                 _linePosition = _reader.LinePosition;

@@ -40,7 +40,7 @@ namespace MadexSDK.ConsentManagerSDK.Platform.Dummy
         {
             DebugLog("SetListener");
         }
-        
+
         private static void DebugLog(string method)
         {
             Debug.Log(

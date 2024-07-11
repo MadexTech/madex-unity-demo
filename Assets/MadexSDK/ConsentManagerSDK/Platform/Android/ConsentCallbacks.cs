@@ -1,5 +1,4 @@
 #if UNITY_ANDROID
-
 using UnityEngine;
 using SspnetSDK.ConsentManagerSDK.Unfiled;
 
