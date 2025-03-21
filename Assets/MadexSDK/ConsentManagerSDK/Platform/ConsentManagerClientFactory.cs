@@ -1,11 +1,11 @@
-using SspnetSDK.ConsentManagerSDK.Unfiled;
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 using MadexSDK.ConsentManagerSDK.Platform.Android;
-#elif UNITY_IPHONE
+#elif UNITY_IPHONE && !UNITY_EDITOR
 using MadexSDK.ConsentManagerSDK.Platform.iOS;
 #else
 using MadexSDK.ConsentManagerSDK.Platform.Dummy;
 #endif
+using SspnetSDK.ConsentManagerSDK.Unfiled;
 
 
 namespace MadexSDK.ConsentManagerSDK.Platform
@@ -14,9 +14,9 @@ namespace MadexSDK.ConsentManagerSDK.Platform
     {
         internal static IConsentManagerClient GetConsentManagerClient()
         {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 			return new AndroidConsentManagerClient();
-#elif UNITY_IPHONE
+#elif UNITY_IPHONE && !UNITY_EDITOR
             return new IOSConsentManagerClient();
 #else
             return new DummyConsentManagerClient();
