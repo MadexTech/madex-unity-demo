@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Madex/MadexDemoScence.unity
+    guid: f2a2fd05eca434e20bd3bfa695b3a960
+  - enabled: 1
+    path: Assets/Scenes/Madex/InterstitialScence.unity
+    guid: 5391f9f3e50234223a3d65fd60785091
+  - enabled: 1
+    path: Assets/Scenes/Madex/RewardedScence.unity
+    guid: ac81a0a348748416bad50a42207b7d49
+  - enabled: 1
+    path: Assets/Scenes/Madex/BannerScence.unity
+    guid: 3752fb7a1a0a445ceaea88062921860c
+  - enabled: 1
+    path: Assets/Scenes/Madex/ConsentManagerScence.unity
+    guid: 720f4839787264221873ecec5cc97d08
   m_configObjects: {}
