@@ -1,14 +1,15 @@
-using SspnetSDK.Unfiled;
 using SspnetSDK.Platform;
+using SspnetSDK.Unfiled;
 
 namespace MadexSDK.Api
 {
     public static class Madex
     {
+        public const int Interstitial = IAdsClient.Interstitial;
+        public const int Rewarded = IAdsClient.Rewarded;
+        public const int Banner = IAdsClient.Banner;
+        
         private static IAdsClient _client;
-
-        public const int Interstitial = 1;
-        public const int Rewarded = 3;
 
         private static IAdsClient GetInstance()
         {
@@ -67,6 +68,16 @@ namespace MadexSDK.Api
         public static void SetRewardedCallbacks(IRewardedAdListener adListener)
         {
             GetInstance().SetRewardedCallbacks(adListener);
+        }
+        
+        public static void SetBannerCallbacks(IBannerAdListener adListener)
+        {
+            GetInstance().SetBannerCallbacks(adListener);
+        }
+        
+        public static void SetBannerCustomSettings(BannerSettings settings)
+        {
+            GetInstance().SetBannerCustomSettings(settings);
         }
 
         public static void SetCustomParams(string key, string value)

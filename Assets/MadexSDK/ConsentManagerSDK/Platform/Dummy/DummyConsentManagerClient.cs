@@ -1,5 +1,5 @@
-using UnityEngine;
 using SspnetSDK.ConsentManagerSDK.Unfiled;
+using UnityEngine;
 
 namespace MadexSDK.ConsentManagerSDK.Platform.Dummy
 {
