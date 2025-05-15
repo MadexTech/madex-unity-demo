@@ -8,7 +8,10 @@ namespace MadexSDK.Demo.Scripts
         private void Start()
         {
             Madex.SetBannerCallbacks(this);
-            Madex.SetBannerCustomSettings(new BannerSettings().SetShowCloseButton(true));
+            var settings = new BannerSettings()
+                .SetShowCloseButton(true)
+                .SetBannerPosition(BannerPosition.BOTTOM);
+            Madex.SetBannerCustomSettings(settings);
             InitClickListeners();
         }
 
