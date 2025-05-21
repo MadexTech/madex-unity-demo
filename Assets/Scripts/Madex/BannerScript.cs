@@ -10,6 +10,7 @@ namespace MadexSDK.Demo.Scripts
             Madex.SetBannerCallbacks(this);
             var settings = new BannerSettings()
                 .SetShowCloseButton(true)
+                .SetRefreshIntervalSeconds(10)
                 .SetBannerPosition(BannerPosition.BOTTOM);
             Madex.SetBannerCustomSettings(settings);
             InitClickListeners();
