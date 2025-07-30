@@ -11,7 +11,7 @@ namespace MadexSDK.Demo.Scripts
             var settings = new BannerSettings()
                 .SetShowCloseButton(true)
                 .SetRefreshIntervalSeconds(10)
-                .SetBannerPosition(BannerPosition.BOTTOM);
+                .SetBannerPosition(BannerPosition.BOTTOM_CENTER);
             Madex.SetBannerCustomSettings(settings);
             InitClickListeners();
         }

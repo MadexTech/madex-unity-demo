@@ -29,14 +29,34 @@ void MadexConsentEnableDebug(BOOL isDebug){
     [ConsentManager enableLog:isDebug];
 }
 
-void MadexRegisterCustomConsentVendor(const char *appName, const char *policyUrl, const char *bundle, BOOL isGdpr){
-    [ConsentManager registerCustomVendor:^(ConsentBuilder* builder) {
-        (void)[builder appendName:[NSString stringWithUTF8String:appName]];
-        (void)[builder appendPolicyURL:[NSString stringWithUTF8String:policyUrl]];
-        (void)[builder appendBundle:[NSString stringWithUTF8String:bundle]];
+void MadexRegisterCustomConsentVendor(const char *appName,
+                                      const char *policyUrl,
+                                      const char *bundle,
+                                      BOOL isGdpr)
+{
+    [ConsentManager registerCustomVendor:^(ConsentBuilder *builder) {
+        if (appName) {
+            NSString *name = [NSString stringWithUTF8String:appName];
+            if (name) {
+                (void)[builder appendName:name];
+            }
+        }
+        if (policyUrl) {
+            NSString *url = [NSString stringWithUTF8String:policyUrl];
+            if (url) {
+                (void)[builder appendPolicyURL:url];
+            }
+        }
+        if (bundle) {
+            NSString *bundleID = [NSString stringWithUTF8String:bundle];
+            if (bundleID) {
+                (void)[builder appendBundle:bundleID];
+            }
+        }
         (void)[builder appendGDPR:isGdpr];
     }];
 }
+
 
 static MadexConsentDelegate *ConsentDelegateInstance;
 void MadexSetConsentDelegate(

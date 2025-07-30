@@ -60,8 +60,18 @@ void SspnetDestroyAdByType(int adType){
     return [SspnetCoreSDK destroyAd:adType];
 }
 
-void SspnetSetCustomParams(const char *key, const char *value){
-    return [SspnetCoreSDK setCustomParams:[NSString stringWithUTF8String:key] :[NSString stringWithUTF8String:value]];
+static id parseParamValue(NSString *valueString) {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *number = [formatter numberFromString:valueString];
+    return number ?: valueString;
+}
+
+void SspnetSetCustomParams(const char *key, const char *value) {
+    NSString *nsKey   = [NSString stringWithUTF8String:key];
+    NSString *nsValue = [NSString stringWithUTF8String:value];
+    id parsedValue    = parseParamValue(nsValue);
+    [SspnetCoreSDK setCustomParams:nsKey :parsedValue];
 }
 
 void SspnetSetUserConsent(BOOL hasConsent){
@@ -152,17 +162,10 @@ void SspnetSetBannerDelegate(
 void SspneSetCustomBannerSettings(BOOL showCloseButton,
                                   NSInteger bannerPositionValue,
                                   NSInteger refreshIntervalSeconds) {
-    NSInteger pos = bannerPositionValue;
-    
-    if (pos != [UnfiledBannerPosition TOP] &&
-        pos != [UnfiledBannerPosition BOTTOM]) {
-        pos = [UnfiledBannerPosition BOTTOM];
-    }
-
     UnfiledBannerSettings *settings =
       [[UnfiledBannerSettings alloc]
          initWithShowCloseButton:showCloseButton
-                    bannerPosition:pos
+                    bannerPosition:bannerPositionValue
             refreshIntervalSeconds:refreshIntervalSeconds];
 
     [SspnetCoreSDK setBannerCustomSettings:settings];

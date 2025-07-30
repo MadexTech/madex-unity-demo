@@ -24,17 +24,12 @@ namespace SspnetSDK.Editor.Windows
     public class SspnetAdapterManager : GUIWindow
     {
         private static EditorCoroutines.EditorCoroutine _coroutine;
-
         private static string _pluginUrl;
         private WebClient _downloader;
         private float _loading;
         private SdkInfo _localSdkInfo;
-
         private float _progress;
-
-
         private Vector2 _scrollPosition;
-
         private SdkInfo _sdkInfo;
 
         protected override void Reset()
@@ -66,7 +61,6 @@ namespace SspnetSDK.Editor.Windows
             _loading = 0f;
             _coroutine = this.StartCoroutine(GetSDKData());
         }
-
 
         private void OnGUI()
         {
@@ -429,7 +423,6 @@ namespace SspnetSDK.Editor.Windows
             }
         }
 
-
         private void AddUpdateCoreActionIfCan(PlatformSdk platformSdk)
         {
             const string path = NetworkConfigsPath + "SspnetCoreDependencies.xml";
@@ -511,7 +504,7 @@ namespace SspnetSDK.Editor.Windows
 
         #region Constants
 
-        private const string PluginVersion = "1.4.1";
+        private const string PluginVersion = "1.4.3";
         private const string PluginRequest = "https://sdkapi.sspnet.tech/api/versions2.json";
         private const string NetworkConfigsPath = "Assets/SspnetSDK/Editor/NetworkConfigs/";
         private const string ExternalNetworkDependencies = "Assets/SspnetSDK/Editor/ExternalNetworkDependencies/";

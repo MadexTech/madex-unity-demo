@@ -4,8 +4,8 @@ apply plugin: 'com.android.library'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    implementation 'sspnet.tech.consent:madex:1.1.2' // Assets/MadexSDK/ConsentManagerSDK/Editor/NetworkConfigs/ConsentDependencies.xml:3
-    implementation 'sspnet.tech:core:1.7.2' // Assets/SspnetSDK/Editor/NetworkConfigs/SspnetCoreDependencies.xml:4
+    implementation 'sspnet.tech.consent:madex:1.2.2' // Assets/MadexSDK/ConsentManagerSDK/Editor/NetworkConfigs/ConsentDependencies.xml:3
+    implementation 'sspnet.tech:core:1.7.5' // Assets/SspnetSDK/Editor/NetworkConfigs/SspnetCoreDependencies.xml:4
 // Android Resolver Dependencies End
 **DEPS**}
 
