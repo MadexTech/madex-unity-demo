@@ -1,11 +1,11 @@
 <dependencies>
     <androidPackages>
-        <androidPackage spec='sspnet.tech.consent:madex:1.2.2'/>
+        <androidPackage spec='sspnet.tech.consent:madex:1.2.3'/>
         <repositories>
             <repository>https://sdkpkg.sspnet.tech</repository>
         </repositories>
     </androidPackages>
     <iosPods>
-        <iosPod name='MadexConsentManager' version="1.0.4" minTargetSdk='13.0'/>
+        <iosPod name='MadexConsentManager' version="1.0.6" minTargetSdk='13.0'/>
     </iosPods>
 </dependencies>

@@ -67,10 +67,30 @@ static id parseParamValue(NSString *valueString) {
     return number ?: valueString;
 }
 
-void SspnetSetCustomParams(const char *key, const char *value) {
-    NSString *nsKey   = [NSString stringWithUTF8String:key];
-    NSString *nsValue = [NSString stringWithUTF8String:value];
-    id parsedValue    = parseParamValue(nsValue);
+static id ParseParamValueFromJSON(NSString *jsonString) {
+    if (jsonString.length == 0) return nil;
+    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    if (!data) return jsonString;
+
+    NSError *err = nil;
+    id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+    if (err || !obj) {
+        if ([jsonString.lowercaseString isEqualToString:@"true"])  return @(YES);
+        if ([jsonString.lowercaseString isEqualToString:@"false"]) return @(NO);
+
+        NSScanner *scanner = [NSScanner scannerWithString:jsonString];
+        double d;
+        if ([scanner scanDouble:&d] && scanner.isAtEnd) return @(d);
+
+        return jsonString;
+    }
+    return obj;
+}
+
+void SspnetSetCustomParams(const char *key, const char *jsonValue) {
+    NSString *nsKey   = key ? [NSString stringWithUTF8String:key] : nil;
+    NSString *nsValue = jsonValue ? [NSString stringWithUTF8String:jsonValue] : @"";
+    id parsedValue    = ParseParamValueFromJSON(nsValue);
     [SspnetCoreSDK setCustomParams:nsKey :parsedValue];
 }
 
@@ -162,11 +182,11 @@ void SspnetSetBannerDelegate(
 void SspneSetCustomBannerSettings(BOOL showCloseButton,
                                   NSInteger bannerPositionValue,
                                   NSInteger refreshIntervalSeconds) {
-    UnfiledBannerSettings *settings =
-      [[UnfiledBannerSettings alloc]
-         initWithShowCloseButton:showCloseButton
-                    bannerPosition:bannerPositionValue
-            refreshIntervalSeconds:refreshIntervalSeconds];
+    UnfiledBannerSettings *settings = [UnfiledBannerSettings alloc];
+    
+    settings = [settings updateBannerPosition:bannerPositionValue];
+    settings = [settings updateShowCloseButton:showCloseButton];
+    settings = [settings updateRefreshIntervalSeconds:refreshIntervalSeconds];
 
     [SspnetCoreSDK setBannerCustomSettings:settings];
 }

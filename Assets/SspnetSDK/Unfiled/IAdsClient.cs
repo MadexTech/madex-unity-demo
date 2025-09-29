@@ -18,7 +18,7 @@ namespace SspnetSDK.Unfiled
         public void SetRewardedCallbacks(IRewardedAdListener adListener);
         public void SetBannerCallbacks(IBannerAdListener adListener);
         public void SetBannerCustomSettings(BannerSettings settings);
-        public void SetCustomParams(string key, string value);
+        public void SetCustomParams(string key, object value);
         public void SetUserConsent(bool hasConsent);
         public void EnableDebug(bool enabled);
         public bool HasUserConsent();

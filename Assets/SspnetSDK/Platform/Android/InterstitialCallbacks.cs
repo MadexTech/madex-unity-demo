@@ -1,4 +1,5 @@
 #if UNITY_ANDROID
+using System;
 using SspnetSDK.Unfiled;
 using UnityEngine;
 
@@ -8,48 +9,108 @@ namespace SspnetSDK.Platform.Android
     {
         private readonly IInterstitialAdListener _listener;
 
-        internal InterstitialCallbacks(IInterstitialAdListener listener) : base(AndroidConstants
-            .InterstitialListener)
+        internal InterstitialCallbacks(IInterstitialAdListener listener)
+            : base(AndroidConstants.InterstitialListener)
         {
             _listener = listener;
         }
 
-        private void onInterstitialLoaded(AndroidJavaObject adPayload)
+        public void onInterstitialLoaded(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnInterstitialLoaded(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnInterstitialLoaded(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onInterstitialLoadFail(AndroidJavaObject adPayload, AndroidJavaObject error)
+        public void onInterstitialLoadFail(AndroidJavaObject adPayload, AndroidJavaObject error)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            var description = error.Call<string>("getDescription");
-            var message = error.Call<string>("getMessage");
-            var caused = error.Call<string>("getCaused");
-            _listener.OnInterstitialLoadFailed(new AdPayload(placementName),new AdException(description, message, caused));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                var ex = CallbackUtils.MakeAdException(error);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnInterstitialLoadFailed(payload, ex);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onInterstitialShowFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
+        public void onInterstitialShown(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            var description = error.Call<string>("getDescription");
-            var message = error.Call<string>("getMessage");
-            var caused = error.Call<string>("getCaused");
-            _listener.OnInterstitialShowFailed(new AdPayload(placementName),new AdException(description, message, caused));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnInterstitialShown(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onInterstitialShown(AndroidJavaObject adPayload)
+        public void onInterstitialShowFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnInterstitialShown(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                var ex = CallbackUtils.MakeAdException(error);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnInterstitialShowFailed(payload, ex);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
         public void onInterstitialClosed(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnInterstitialClosed(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnInterstitialClosed(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
     }
 }
-
 #endif

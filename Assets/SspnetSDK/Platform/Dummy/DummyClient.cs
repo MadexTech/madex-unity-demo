@@ -97,7 +97,7 @@ namespace SspnetSDK.Platform.Dummy
             DebugLog("SetBannerCustomSettings");
         }
 
-        public void SetCustomParams(string key, string value)
+        public void SetCustomParams(string key, object value)
         {
             DebugLog("setCustomParams");
         }

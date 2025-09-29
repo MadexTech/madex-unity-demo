@@ -8,7 +8,7 @@ namespace MadexSDK.Api
         public const int Interstitial = IAdsClient.Interstitial;
         public const int Rewarded = IAdsClient.Rewarded;
         public const int Banner = IAdsClient.Banner;
-        
+
         private static IAdsClient _client;
 
         private static IAdsClient GetInstance()
@@ -69,18 +69,18 @@ namespace MadexSDK.Api
         {
             GetInstance().SetRewardedCallbacks(adListener);
         }
-        
+
         public static void SetBannerCallbacks(IBannerAdListener adListener)
         {
             GetInstance().SetBannerCallbacks(adListener);
         }
-        
+
         public static void SetBannerCustomSettings(BannerSettings settings)
         {
             GetInstance().SetBannerCustomSettings(settings);
         }
 
-        public static void SetCustomParams(string key, string value)
+        public static void SetCustomParams(string key, object value)
         {
             GetInstance().SetCustomParams(key, value);
         }

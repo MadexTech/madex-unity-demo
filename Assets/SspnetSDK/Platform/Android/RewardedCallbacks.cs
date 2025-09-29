@@ -1,4 +1,5 @@
 #if UNITY_ANDROID
+using System;
 using SspnetSDK.Unfiled;
 using UnityEngine;
 
@@ -8,65 +9,165 @@ namespace SspnetSDK.Platform.Android
     {
         private readonly IRewardedAdListener _listener;
 
-        internal RewardedCallbacks(IRewardedAdListener listener) : base(AndroidConstants.RewardedListener)
+        internal RewardedCallbacks(IRewardedAdListener listener)
+            : base(AndroidConstants.RewardedListener)
         {
             _listener = listener;
         }
 
-        private void onRewardedLoaded(AndroidJavaObject adPayload)
+        public void onRewardedLoaded(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnRewardedLoaded(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnRewardedLoaded(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onRewardedLoadFail(AndroidJavaObject adPayload, AndroidJavaObject error)
+        public void onRewardedLoadFail(AndroidJavaObject adPayload, AndroidJavaObject error)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            var description = error.Call<string>("getDescription");
-            var message = error.Call<string>("getMessage");
-            var caused = error.Call<string>("getCaused");
-            _listener.OnRewardedLoadFailed(new AdPayload(placementName),new AdException(description, message, caused));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                var ex = CallbackUtils.MakeAdException(error);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnRewardedLoadFailed(payload, ex);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onRewardedShown(AndroidJavaObject adPayload)
+        public void onRewardedShown(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnRewardedShown(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnRewardedShown(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onRewardedShowFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
+        public void onRewardedShowFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            var description = error.Call<string>("getDescription");
-            var message = error.Call<string>("getMessage");
-            var caused = error.Call<string>("getCaused");
-            _listener.OnRewardedShowFailed(new AdPayload(placementName),new AdException(description, message, caused));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                var ex = CallbackUtils.MakeAdException(error);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnRewardedShowFailed(payload, ex);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
         public void onRewardedClosed(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnRewardedClosed(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnRewardedClosed(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
-        
+
         public void onRewardedVideoStarted(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnRewardedVideoStarted(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnRewardedVideoStarted(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
-        
+
         public void onRewardedVideoCompleted(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnRewardedVideoCompleted(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnRewardedVideoCompleted(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
         public void onUserRewarded(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnUserRewarded(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnUserRewarded(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
     }
 }
-
 #endif

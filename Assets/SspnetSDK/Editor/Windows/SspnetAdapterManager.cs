@@ -504,7 +504,7 @@ namespace SspnetSDK.Editor.Windows
 
         #region Constants
 
-        private const string PluginVersion = "1.4.3";
+        private const string PluginVersion = "1.4.5";
         private const string PluginRequest = "https://sdkapi.sspnet.tech/api/versions2.json";
         private const string NetworkConfigsPath = "Assets/SspnetSDK/Editor/NetworkConfigs/";
         private const string ExternalNetworkDependencies = "Assets/SspnetSDK/Editor/ExternalNetworkDependencies/";

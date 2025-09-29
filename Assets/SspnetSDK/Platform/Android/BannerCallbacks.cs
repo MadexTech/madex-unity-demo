@@ -1,4 +1,5 @@
 #if UNITY_ANDROID
+using System;
 using SspnetSDK.Unfiled;
 using UnityEngine;
 
@@ -8,53 +9,127 @@ namespace SspnetSDK.Platform.Android
     {
         private readonly IBannerAdListener _listener;
 
-        internal BannerCallbacks(IBannerAdListener listener) : base(AndroidConstants.BannerListener)
+        internal BannerCallbacks(IBannerAdListener listener)
+            : base(AndroidConstants.BannerListener)
         {
             _listener = listener;
         }
 
-        private void onBannerLoaded(AndroidJavaObject adPayload)
+        public void onBannerLoaded(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnBannerLoaded(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnBannerLoaded(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onBannerLoadFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
+        public void onBannerLoadFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            var description = error.Call<string>("getDescription");
-            var message = error.Call<string>("getMessage");
-            var caused = error.Call<string>("getCaused");
-            _listener.OnBannerLoadFailed(new AdPayload(placementName),new AdException(description, message, caused));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                var ex = CallbackUtils.MakeAdException(error);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnBannerLoadFailed(payload, ex);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onBannerShown(AndroidJavaObject adPayload)
+        public void onBannerShown(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnBannerShown(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnBannerShown(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
-        private void onBannerShowFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
+        public void onBannerShowFailed(AndroidJavaObject adPayload, AndroidJavaObject error)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            var description = error.Call<string>("getDescription");
-            var message = error.Call<string>("getMessage");
-            var caused = error.Call<string>("getCaused");
-            _listener.OnBannerShowFailed(new AdPayload(placementName),new AdException(description, message, caused));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                var ex = CallbackUtils.MakeAdException(error);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnBannerShowFailed(payload, ex);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
 
         public void onBannerClosed(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnBannerClosed(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnBannerClosed(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
-        
+
         public void onBannerImpression(AndroidJavaObject adPayload)
         {
-            var placementName = adPayload.Call<string>("getPlacementName");
-            _listener.OnBannerImpression(new AdPayload(placementName));
+            CallbackUtils.SafeJniInvoke(() =>
+            {
+                var payload = CallbackUtils.MakePayload(adPayload);
+                CallbackUtils.OnMainThread(() =>
+                {
+                    try
+                    {
+                        _listener?.OnBannerImpression(payload);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                });
+            });
         }
     }
 }
-
 #endif

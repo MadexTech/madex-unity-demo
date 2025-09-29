@@ -99,9 +99,10 @@ namespace SspnetSDK.Platform.iOS
                 settings.RefreshIntervalSeconds);
         }
 
-        public void SetCustomParams(string key, string value)
+        public void SetCustomParams(string key, object value)
         {
-            ObjCBridge.SspnetSetCustomParams(key, value);
+            var json = MiniJson.Serialize(value);
+            ObjCBridge.SspnetSetCustomParams(key, json);
         }
 
         public void SetUserConsent(bool hasConsent)
